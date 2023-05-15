@@ -1,0 +1,8 @@
+name: farmOS Inventory Views
+description: Adds inventory quantity field to assets views.
+type: module
+package: farmOS Contrib
+core_version_requirement: ^9 || ^10
+dependencies:
+  - drupal:views
+  - farm:farm_inventory

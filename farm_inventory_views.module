@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Contains farm_inventory_views.module.
+ */
+
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function farm_inventory_views_views_pre_view(ViewExecutable $view, string $display_id, array &$args): void {
+
+  // Add quantity field to farm_asset view.
+  if ($view->id() === 'farm_asset') {
+    $view->addHandler($display_id, 'field', 'asset', 'quantity', [
+      'alter' => [],
+      'id' => 'quantity',
+      'field' => 'quantity',
+      'plugin_id' => 'asset_quantity',
+      'label' => t('Quantity'),
+      "type" => "inventory",
+    ]);
+  }
+
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function farm_inventory_views_views_data_alter(array &$data): void {
+
+  // Add computed quantity field to assets.
+  if (isset($data['asset'])) {
+    $data['asset']['quantity'] = [
+      'title' => t('Quantity'),
+      'field' => [
+        'id' => 'asset_quantity',
+        'field_name' => 'inventory',
+      ],
+      'argument' => [
+        'id' => 'asset_quantity',
+      ],
+    ];
+  }
+
+}
